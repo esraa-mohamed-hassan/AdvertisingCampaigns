@@ -1,7 +1,16 @@
-import './bootstrap';
+import { createApp } from 'vue';
 
-import Alpine from 'alpinejs';
+const app = createApp({
+    data() {
+        return {
+            exampleModalShowing: true,
+        }
+    }
+});
 
-window.Alpine = Alpine;
+// resources/js/app.js
+app.component('card-modal', './components/CardModal.vue');
 
-Alpine.start();
+app.config.devtools = true;
+
+app.mount('#app');

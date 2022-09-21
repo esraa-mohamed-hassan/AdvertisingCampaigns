@@ -21,6 +21,8 @@ return new class extends Migration
             $table->float('total', 2, 2);
             $table->float('daily_budget', 2, 2);
             $table->string('images');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Campaigns;
 use App\Http\Controllers\Controller;
 use App\Models\Campaigns\AdvertisingCampaigns;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdvertisingCampaignsController extends Controller
 {
@@ -15,7 +16,7 @@ class AdvertisingCampaignsController extends Controller
      */
     public function index()
     {
-        $campaigns = AdvertisingCampaigns::latest()->paginate(5);
+        $campaigns = AdvertisingCampaigns::where('user_id', Auth::user()->id)->paginate(10);
 
         return view('Campaigns.index',compact('campaigns'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
@@ -57,6 +58,7 @@ class AdvertisingCampaignsController extends Controller
             $input['images'] = "$profileImage";
         }
 
+        $input['user_id'] = Auth::user()->id;
         AdvertisingCampaigns::create($input);
 
         return redirect()->route('campaigns.index')
@@ -110,6 +112,7 @@ class AdvertisingCampaignsController extends Controller
             $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
             $image->move($destinationPath, $profileImage);
             $input['images'] = "$profileImage";
+            $input['user_id'] = Auth::user()->id;
         }else{
             unset($input['images']);
         }

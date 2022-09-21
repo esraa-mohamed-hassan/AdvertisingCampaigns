@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Campaigns;
 
 use App\Http\Controllers\Controller;
+use App\Models\Campaigns\AdvertisingCampaigns;
 use Illuminate\Http\Request;
 
 class ApiAdvertisingCampaignsController extends Controller
@@ -14,7 +15,9 @@ class ApiAdvertisingCampaignsController extends Controller
      */
     public function index()
     {
-        //
+        $campaigns = AdvertisingCampaigns::get();
+
+        return response()->json($campaigns);
     }
 
     /**
@@ -69,7 +72,35 @@ class ApiAdvertisingCampaignsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd($request, $id);
+        $request->validate([
+            'name' => 'required',
+            'from' => 'required|date',
+            'to' => 'required|date',
+            'total' => 'required|numeric',
+            'daily_budget' => 'required|numeric',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $input = $request->all();
+
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/';
+            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['images'] = "$profileImage";
+        }else{
+            unset($input['images']);
+        }
+
+        $result = AdvertisingCampaigns::whereId($id)->update($input);
+
+        return response()->json([
+            'success' => '200',
+            'msg' => 'AdvertisingCampaigns updated successfully',
+            'data' => $result
+        ]);
+
     }
 
     /**
@@ -80,6 +111,10 @@ class ApiAdvertisingCampaignsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        AdvertisingCampaigns::whereId($id)->delete();
+        return response()->json([
+            'success' => '200',
+            'msg' => 'AdvertisingCampaigns deleted successfully',
+        ]);
     }
 }

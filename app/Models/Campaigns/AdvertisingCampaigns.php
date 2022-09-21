@@ -20,5 +20,6 @@ class AdvertisingCampaigns extends Model
         'total',
         'daily_budget',
         'images',
+        'user_id'
     ];
 }

@@ -47,7 +47,25 @@
                         <td>{{ $campaign->total }}</td>
                         <td>{{ $campaign->daily_budget }}</td>
                         <td>
+                            <div id="app">
+                               <button>
+                                <card-modal :showing="true" >
+                                    <h2 class="text-xl font-bold text-gray-900">Example modal</h2>
+                                    <p class="mb-6">This is example text passed through to the modal via a slot.</p>
+                                    <button
+                                      class="bg-blue-600 text-white px-4 py-2 text-sm uppercase tracking-wide font-bold rounded-lg"
+
+                                    >
+                                      Close
+                                    </button>
+                                </card-modal>
+                               </button>
+                               </div>
+
                             <form action="{{ route('campaigns.destroy',$campaign->id) }}" method="POST">
+
+
+
 
                                 <a class="btn btn-info" href="{{ route('campaigns.show',$campaign->id) }}">Show</a>
 

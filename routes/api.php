@@ -20,3 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::get('advertising', [ApiAdvertisingCampaignsController::class, 'index']);
+
+Route::put('advertising/{id}', [ApiAdvertisingCampaignsController::class, 'update']);
+
+Route::delete('advertising/{id}', [ApiAdvertisingCampaignsController::class, 'delete']);
