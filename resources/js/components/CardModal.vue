@@ -1,58 +1,70 @@
 <template>
-    <Transition name="fade">
-      <div
-        v-if="showing"
-        class="fixed inset-0 w-full h-screen flex items-center justify-center bg-semi-75"
-        @click.self="close"
-      >
-        <div class="relative w-full max-w-2xl bg-white shadow-lg rounded-lg p-8">
-          <button
-            aria-label="close"
-            class="absolute top-0 right-0 text-xl text-gray-500 my-2 mx-4"
-            @click.prevent="close"
-          >
-            ×
-          </button>
-          <slot />
-        </div>
-      </div>
-    </Transition>
-  </template>
+    <div>
+        <b-button v-b-modal.modal-lg variant="primary">lg modal</b-button>
 
+        <b-modal id="modal-lg" size="lg" title="Large Modal">
 
+            <div>
+                <b-carousel id="carousel-1" v-model="slide" :interval="4000"
+                 controls indicators background="#ababab"
+                    img-width="1024" img-height="480" style="text-shadow: 1px 1px 2px #333;"
+                    @sliding-start="onSlideStart" @sliding-end="onSlideEnd">
+                    <!-- Text slides with image -->
+                    <b-carousel-slide caption="First slide" :active="true"
+                        text="Nulla vitae elit libero, a pharetra augue mollis interdum."
+                        img-src="https://picsum.photos/1024/480/?image=52"></b-carousel-slide>
+
+                    <!-- Slides with custom text -->
+                    <b-carousel-slide :active="false" img-src="https://picsum.photos/1024/480/?image=54">
+                        <h1>Hello world!</h1>
+                    </b-carousel-slide>
+
+                    <!-- Slides with image only -->
+                    <b-carousel-slide :active="false" img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
+
+                    <!-- Slides with img slot -->
+                    <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
+                    <b-carousel-slide :active="false">
+                        <template #img>
+                            <img class="d-block img-fluid w-100" width="1024" height="480"
+                                src="https://picsum.photos/1024/480/?image=55" alt="image slot">
+                        </template>
+                    </b-carousel-slide>
+
+                    <!-- Slide with blank fluid image to maintain slide aspect ratio -->
+                    <b-carousel-slide caption="Blank Image" img-blank img-alt="Blank image">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eros felis, tincidunt
+                            a tincidunt eget, convallis vel est. Ut pellentesque ut lacus vel interdum.
+                        </p>
+                    </b-carousel-slide>
+                </b-carousel>
+
+                <p class="mt-4">
+                    Slide #: {{ slide }}<br>
+                    Sliding: {{ sliding }}
+                </p>
+            </div>
+
+        </b-modal>
+
+    </div>
+</template>
 <script>
-    export default {
-      props: {
-        showing: {
-          required: true,
-          type: Boolean
+export default {
+    data() {
+        return {
+            slide: 0,
+            sliding: null
         }
-      },
-      watch: {
-        showing(value) {
-          if (value) {
-            return document.querySelector('body').classList.add('overflow-hidden');
-          }
-
-          document.querySelector('body').classList.remove('overflow-hidden');
+    },
+    methods: {
+        onSlideStart(slide) {
+            this.sliding = true
+        },
+        onSlideEnd(slide) {
+            this.sliding = false
         }
-      },
-      methods: {
-        close() {
-          this.$emit('close');
-        }
-      }
-    };
-    </script>
-
-
-  <style scoped>
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: all 0.4s;
-  }
-  .fade-enter,
-  .fade-leave-to {
-    opacity: 0;
-  }
-  </style>
+    }
+}
+</script>
